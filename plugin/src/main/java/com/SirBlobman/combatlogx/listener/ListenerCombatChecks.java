@@ -3,18 +3,15 @@ package com.SirBlobman.combatlogx.listener;
 import java.util.List;
 import java.util.UUID;
 
-import com.SirBlobman.combatlogx.api.ICombatLogX;
-import com.SirBlobman.combatlogx.api.event.PlayerPreTagEvent;
-import com.SirBlobman.combatlogx.api.event.PlayerTagEvent;
-import com.SirBlobman.combatlogx.api.event.PlayerUntagEvent;
-import com.SirBlobman.combatlogx.api.utility.ICombatManager;
-
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.World;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.entity.*;
+import org.bukkit.entity.Creeper;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.LivingEntity;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -25,6 +22,12 @@ import org.bukkit.event.player.PlayerRespawnEvent;
 import org.bukkit.permissions.Permission;
 import org.bukkit.permissions.PermissionDefault;
 
+import com.SirBlobman.combatlogx.api.ICombatLogX;
+import com.SirBlobman.combatlogx.api.event.PlayerPreTagEvent;
+import com.SirBlobman.combatlogx.api.event.PlayerTagEvent;
+import com.SirBlobman.combatlogx.api.event.PlayerUntagEvent;
+import com.SirBlobman.combatlogx.api.utility.ICombatManager;
+
 public class ListenerCombatChecks implements Listener {
     private final ICombatLogX plugin;
     public ListenerCombatChecks(ICombatLogX plugin) {
@@ -34,24 +37,36 @@ public class ListenerCombatChecks implements Listener {
     @EventHandler(priority=EventPriority.LOWEST, ignoreCancelled=true)
     public void beforeTag(PlayerPreTagEvent e) {
         Player player = e.getPlayer();
-        
+        printDebug("Detected PlayerPreTagEvent for player '" + player.getName() + "'...");
+
+        printDebug("Checking if player is in a disabled world...");
         if(isInDisabledWorld(player)) {
+            printDebug("Player is in a disabled world, cancelling event.");
             e.setCancelled(true);
             return;
         }
 
+        printDebug("Checking if player has bypass permission...");
         if(canBypass(player)) {
+            printDebug("Player has bypass permission, cancelling event.");
             e.setCancelled(true);
             return;
         }
 
         LivingEntity enemy = e.getEnemy();
-        if(enemy == null) return;
-
-        if(checkNoSelfCombat(player, enemy)) {
-            e.setCancelled(true);
-            // return;
+        if(enemy == null) {
+            printDebug("Enemy is unknown, ignoring event.");
+            return;
         }
+
+        printDebug("Checking if enemy is self and self combat config...");
+        if(checkNoSelfCombat(player, enemy)) {
+            printDebug("Enemy is self and self-combat is disabled, cancelling event.");
+            e.setCancelled(true);
+            return;
+        }
+
+        printDebug("Completed PlayerPreTagEvent checks without cancellation.");
     }
 
     @EventHandler(priority=EventPriority.MONITOR, ignoreCancelled=true)
@@ -185,5 +200,9 @@ public class ListenerCombatChecks implements Listener {
         if(!combatManager.isInCombat(player)) return;
 
         combatManager.untag(player, PlayerUntagEvent.UntagReason.EXPIRE);
+    }
+
+    private void printDebug(String message) {
+        this.plugin.printDebug(message);
     }
 }
