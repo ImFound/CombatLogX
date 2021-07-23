@@ -30,6 +30,7 @@ softdepend:
   - "Lands"
   - "LegacyFactions"
   - "MVdWPlaceholderAPI"
+  - "MythicMobs"
   - "PlaceholderAPI"
   - "PreciousStones"
   - "PremiumVanish"

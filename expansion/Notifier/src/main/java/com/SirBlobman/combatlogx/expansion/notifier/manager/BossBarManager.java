@@ -10,8 +10,8 @@ import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitScheduler;
 
 import com.github.sirblobman.api.nms.MultiVersionHandler;
-import com.github.sirblobman.api.nms.bossbar.BossBarHandler;
 import com.github.sirblobman.api.utility.MessageUtility;
+import com.github.sirblobman.bossbar.BossBarHandler;
 
 import com.SirBlobman.combatlogx.api.ICombatLogX;
 import com.SirBlobman.combatlogx.api.utility.ICombatManager;
@@ -20,9 +20,12 @@ import com.SirBlobman.combatlogx.expansion.notifier.Notifier;
 public class BossBarManager {
     private final Notifier expansion;
     private final List<UUID> disabledList;
+    private final BossBarHandler bossBarHandler;
+
     public BossBarManager(Notifier expansion) {
         this.expansion = expansion;
         this.disabledList = new ArrayList<>();
+        this.bossBarHandler = expansion.getPlugin().getMultiVersionHandler().getBossBarHandler();
     }
 
     /**

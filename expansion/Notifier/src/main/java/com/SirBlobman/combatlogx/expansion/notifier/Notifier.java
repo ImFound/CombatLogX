@@ -3,6 +3,13 @@ package com.SirBlobman.combatlogx.expansion.notifier;
 import java.util.Collection;
 import java.util.logging.Logger;
 
+import org.bukkit.Bukkit;
+import org.bukkit.entity.Player;
+import org.bukkit.plugin.Plugin;
+import org.bukkit.plugin.PluginDescriptionFile;
+import org.bukkit.plugin.PluginManager;
+import org.bukkit.plugin.java.JavaPlugin;
+
 import com.SirBlobman.combatlogx.api.ICombatLogX;
 import com.SirBlobman.combatlogx.api.expansion.Expansion;
 import com.SirBlobman.combatlogx.expansion.notifier.command.CommandNotifier;
@@ -14,17 +21,11 @@ import com.SirBlobman.combatlogx.expansion.notifier.manager.BossBarManager;
 import com.SirBlobman.combatlogx.expansion.notifier.manager.ScoreBoardManager;
 import com.SirBlobman.combatlogx.utility.PlaceholderReplacer;
 
-import org.bukkit.Bukkit;
-import org.bukkit.entity.Player;
-import org.bukkit.plugin.Plugin;
-import org.bukkit.plugin.PluginDescriptionFile;
-import org.bukkit.plugin.PluginManager;
-import org.bukkit.plugin.java.JavaPlugin;
-
-public class Notifier extends Expansion {
+public final class Notifier extends Expansion {
     private final ActionBarManager actionBarManager;
     private final BossBarManager bossBarManager;
     private final ScoreBoardManager scoreBoardManager;
+
     public Notifier(ICombatLogX plugin) {
         super(plugin);
         this.actionBarManager = new ActionBarManager(this);
