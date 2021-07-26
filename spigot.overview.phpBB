@@ -19,12 +19,16 @@ If you want to find out more information about each expansion, click the link to
 [SIZE=5][B][COLOR=#FF0000]Installation Guide:[/COLOR][/B][/SIZE]
 CombatLogX has different installation steps than other plugins, please read this guide before trying to add the plugin to your server!
 [LIST=1]
-[*]Download the [ICODE]CombatLogX.zip[/ICODE] file.
-[*]Stop your server.
-[*]Extract the contents of the the [ICODE]CombatLogX.zip[/ICODE] file into the [ICODE]/plugins/[/ICODE] folder of your server.
-[*]Start your server to generate the config files.
-[*]Stop your server and configure the files to the settings that you want. You can also remove some of the expansion jar files if you will not be using them.
-[*]Start your server and enjoy the plugin!
+[*]Make sure your server is completely stopped.
+[*]Make sure all dependencies listed above are installed on your server.
+[*]Download the 'CombatLogX.zip' file through SpigotMC (Stable) or Jenkins (Beta).
+[*]Extract the 'CombatLogX.jar' file from the zip into the '/plugins/' folder of your server.
+[*]Create a new folder called '/plugins/CombatLogX/expansions/' on your server.
+[*]Extract the expansion jar files into your '/plugins/CombatLogX/expansions/' folder of your server.
+[*]Start your server so that the configuration files can be generated.
+[*]Stop your server and then edit the configuration files with the settings that you wish to use.
+[*]While your server is stopped, you can also remove any expansion jar files that you will not be using.
+[*]Start your server and enjoy using CombatLogX!
 [/LIST]
 
 [SIZE=5][B][COLOR=#FF0000]CombatLogX Beta:[/COLOR][/B][/SIZE]
