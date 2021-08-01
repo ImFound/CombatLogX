@@ -37,13 +37,10 @@
             </snapshots>
         </repository>
 
-        <!-- robinrether Repository -->
+        <!-- Robingrether Repository -->
         <repository>
-            <id>robinrether-repo</id>
+            <id>robingrether</id>
             <url>https://www.robingrether.de/mc/repo/</url>
-            <snapshots>
-                <enabled>false</enabled>
-            </snapshots>
         </repository>
     </repositories>
     
@@ -64,18 +61,12 @@
             <scope>provided</scope>
         </dependency>
 
-        <!-- Lib's Disguises-->
+        <!-- LibsDisguises -->
         <dependency>
             <groupId>LibsDisguises</groupId>
             <artifactId>LibsDisguises</artifactId>
-            <version>10.0.15</version>
+            <version>10.0.26</version>
             <scope>provided</scope>
-            <exclusions>
-                <exclusion>
-                    <groupId>org.spigotmc</groupId>
-                    <artifactId>spigot</artifactId>
-                </exclusion>
-            </exclusions>
         </dependency>
 
         <!-- iDisguise -->

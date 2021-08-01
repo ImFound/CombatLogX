@@ -26,12 +26,12 @@ public class ListenerDisguise implements Listener {
         Player player = e.getPlayer();
         boolean undisguised = false;
 
-        if(isEnabled("iDisguise") && HookLibsDisguises.isDisguised(player)) {
+        if(isEnabled("iDisguise") && HookiDisguise.isDisguised(player)) {
             HookLibsDisguises.undisguise(player);
             undisguised = true;
         }
 
-        if(isEnabled("LibsDisguises") && HookiDisguise.isDisguised(player)) {
+        if(isEnabled("LibsDisguises") && HookLibsDisguises.isDisguised(player)) {
             HookiDisguise.undisguise(player);
             undisguised = true;
         }
