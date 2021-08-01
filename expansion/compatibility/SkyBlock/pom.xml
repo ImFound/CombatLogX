@@ -22,22 +22,22 @@
             <url>https://hub.spigotmc.org/nexus/content/repositories/snapshots/</url>
         </repository>
 
-        <!-- CodeMC Public Repository -->
+        <!-- SirBlobman Public Repository -->
         <repository>
-            <id>codemc-public</id>
-            <url>https://repo.codemc.io/repository/maven-public/</url>
-        </repository>
-        
-        <!-- Songoda Public -->
-        <repository>
-            <id>songoda-public</id>
-            <url>https://repo.songoda.com/repository/public/</url>
+            <id>sirblobman-public</id>
+            <url>https://nexus.sirblobman.xyz/repository/public/</url>
         </repository>
 
         <!-- SirBlobman Private Repository -->
         <repository>
             <id>sirblobman-private</id>
             <url>https://nexus.sirblobman.xyz/repository/private/</url>
+        </repository>
+
+        <!-- Songoda Public -->
+        <repository>
+            <id>songoda-public</id>
+            <url>https://repo.songoda.com/repository/public/</url>
         </repository>
         
         <!-- Ultimate SkyBlock Repository -->
@@ -72,20 +72,26 @@
             <version>${project.version}</version>
             <scope>provided</scope>
         </dependency>
-        
+
         <!-- BentoBox -->
         <dependency>
             <groupId>world.bentobox</groupId>
             <artifactId>bentobox</artifactId>
-            <version>1.15.0</version>
+            <version>1.17.2</version>
             <scope>provided</scope>
+            <exclusions>
+                <exclusion>
+                    <groupId>*</groupId>
+                    <artifactId>*</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
-        
-        <!-- BSkyBlock -->
+
+        <!-- BentoBox BSkyBlock -->
         <dependency>
             <groupId>world.bentobox</groupId>
             <artifactId>bskyblock</artifactId>
-            <version>1.14.0</version>
+            <version>1.15.1</version>
             <scope>provided</scope>
         </dependency>
         

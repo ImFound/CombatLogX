@@ -13,20 +13,20 @@
     <properties>
         <java.version>1.8</java.version>
         <spigot.version>1.16.5-R0.1-SNAPSHOT</spigot.version>
-
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <maven.compiler.source>${java.version}</maven.compiler.source>
-        <maven.compiler.target>${java.version}</maven.compiler.target>
         <build.number>unofficial</build.number>
 
+        <maven.compiler.source>${java.version}</maven.compiler.source>
+        <maven.compiler.target>${java.version}</maven.compiler.target>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+
         <!-- Actual CombatLogX Version -->
-        <!-- Format: major.minor.patch.expansiom -->
+        <!-- Format: major.minor.patch.expansion -->
         <!-- 'major' will change when the API is modified or huge changes are created -->
         <!-- 'minor' will change when a new expansion is created or big changes are made -->
         <!-- 'patch' will change when small changes are made to the plugin -->
         <!-- 'expansion' will change when an expansion is changed or updated -->
         <!-- ${build.number} is based on jenkins -->
-        <combatlogx.version>10.4.2.2</combatlogx.version>
+        <combatlogx.version>10.4.2.3</combatlogx.version>
     </properties>
 
     <modules>
