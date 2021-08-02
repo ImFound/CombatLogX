@@ -2,6 +2,10 @@ package com.SirBlobman.combatlogx.expansion.compatibility.towny;
 
 import java.util.logging.Logger;
 
+import org.bukkit.Bukkit;
+import org.bukkit.plugin.Plugin;
+import org.bukkit.plugin.PluginManager;
+
 import com.SirBlobman.combatlogx.api.ICombatLogX;
 import com.SirBlobman.combatlogx.api.expansion.ExpansionManager;
 import com.SirBlobman.combatlogx.api.expansion.noentry.NoEntryExpansion;
@@ -10,13 +14,10 @@ import com.SirBlobman.combatlogx.api.expansion.noentry.NoEntryHandler;
 import com.SirBlobman.combatlogx.api.expansion.noentry.NoEntryListener;
 import com.SirBlobman.combatlogx.expansion.compatibility.towny.handler.TownyNoEntryHandler;
 
-import org.bukkit.Bukkit;
-import org.bukkit.plugin.Plugin;
-import org.bukkit.plugin.PluginManager;
-
 public class CompatibilityTowny extends NoEntryExpansion {
     private NoEntryForceFieldListener forceFieldListener;
     private NoEntryHandler noEntryHandler;
+    
     public CompatibilityTowny(ICombatLogX plugin) {
         super(plugin);
     }

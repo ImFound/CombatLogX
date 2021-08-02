@@ -1,54 +1,47 @@
 package com.SirBlobman.combatlogx.expansion.compatibility.towny.hook;
 
-import com.palmergames.bukkit.towny.war.flagwar.FlagWar;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.plugin.PluginManager;
 
 import com.palmergames.bukkit.towny.TownyAPI;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.TownBlock;
+import com.palmergames.bukkit.towny.object.TownyPermission;
 import com.palmergames.bukkit.towny.object.TownyWorld;
+import io.github.townyadvanced.flagwar.FlagWarAPI;
 
 public final class HookTowny {
-    public static TownyAPI getAPI() {
-        return TownyAPI.getInstance();
-    }
-
-    public static TownBlock getTownBlock(Location location) {
-        TownyAPI api = getAPI();
-        if(api == null) return null;
-
-        return api.getTownBlock(location);
-    }
-    
-    public static TownyWorld getTownWorld(Location location) {
-        TownBlock townBlock = getTownBlock(location);
-        return (townBlock == null ? null : townBlock.getWorld());
-    }
-
-    public static Town getTown(Location location) {
-        try {
-            TownBlock townBlock = getTownBlock(location);
-            if(townBlock == null) return null;
-
-            return townBlock.getTown();
-        } catch(NotRegisteredException ex) {
-            return null;
-        }
-    }
-
     public static boolean isSafeZone(Location location) {
-        TownyAPI api = getAPI();
-        if(api.isWarTime()) return false;
+        TownBlock townBlock = getTownBlock(location);
+        if(townBlock == null) return false;
         
-        TownyWorld townyWorld = getTownWorld(location);
+        TownyAPI townyAPI = TownyAPI.getInstance();
+        if(townyAPI.isWarTime()) return false;
+        
+        TownyWorld townyWorld = townBlock.getWorld();
         if(townyWorld == null || townyWorld.isForcePVP()) return false;
         
-        Town town = getTown(location);
-        if (town == null || town.isPVP() || town.isAdminEnabledPVP()) return false;
-        if (FlagWar.isUnderAttack(town)) return false;
-
-        TownBlock townBlock = TownyAPI.getInstance().getTownBlock(location);
-        return (townBlock != null && !townBlock.getPermissions().pvp);
+        Town town;
+        try {
+            town = townBlock.getTown();
+            if(town == null || town.isPVP() || town.isAdminEnabledPVP()) return false;
+        } catch(NotRegisteredException ex) {
+            return false;
+        }
+        
+        PluginManager pluginManager = Bukkit.getPluginManager();
+        if(pluginManager.isPluginEnabled("FlagWar")) {
+            if(FlagWarAPI.isUnderAttack(town)) return false;
+        }
+        
+        TownyPermission townBlockPermissions = townBlock.getPermissions();
+        return !townBlockPermissions.pvp;
+    }
+    
+    private static TownBlock getTownBlock(Location location) {
+        TownyAPI townyAPI = TownyAPI.getInstance();
+        return townyAPI.getTownBlock(location);
     }
 }

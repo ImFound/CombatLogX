@@ -32,6 +32,9 @@
         <repository>
             <id>jitpack</id>
             <url>https://jitpack.io/</url>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
         </repository>
     </repositories>
     
@@ -52,11 +55,19 @@
             <scope>provided</scope>
         </dependency>
 
-        <!-- Towny -->
+        <!-- Towny Advanced -->
         <dependency>
             <groupId>com.github.TownyAdvanced</groupId>
             <artifactId>Towny</artifactId>
-            <version>0.96.2.0</version>
+            <version>0.97.0.18</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <!-- FlagWar -->
+        <dependency>
+            <groupId>com.github.TownyAdvanced</groupId>
+            <artifactId>FlagWar</artifactId>
+            <version>0.2.0-devel</version>
             <scope>provided</scope>
         </dependency>
     </dependencies>
