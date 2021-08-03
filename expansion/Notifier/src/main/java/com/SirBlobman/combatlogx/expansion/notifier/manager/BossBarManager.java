@@ -69,6 +69,8 @@ public class BossBarManager {
     }
     
     public void removeBossBar(Player player, boolean onDisable) {
+        if(!player.isOnline()) return;
+        
         ICombatLogX plugin = this.expansion.getPlugin();
         MultiVersionHandler multiVersionHandler = plugin.getMultiVersionHandler();
         BossBarHandler bossBarHandler = multiVersionHandler.getBossBarHandler();
@@ -78,9 +80,9 @@ public class BossBarManager {
             return;
         }
     
-        String message = getEndedMessage(player);
         String color = getColor();
         String style = getStyle();
+        String message = getEndedMessage(player);
         bossBarHandler.updateBossBar(player, message, 0.0D, color, style);
         
         Runnable task = () -> bossBarHandler.removeBossBar(player);
