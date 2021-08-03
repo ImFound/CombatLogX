@@ -37,6 +37,9 @@ public class ListenerCustomDeath implements ICustomDeathListener {
 
         UUID uuid = player.getUniqueId();
         this.customDeathSet.add(uuid);
+        
+        String playerName = player.getName();
+        printDebug("Added player '" + playerName + "' to the custom death list.");
     }
 
     @Override
@@ -45,6 +48,9 @@ public class ListenerCustomDeath implements ICustomDeathListener {
 
         UUID uuid = player.getUniqueId();
         this.customDeathSet.remove(uuid);
+    
+        String playerName = player.getName();
+        printDebug("Removed player '" + playerName + "' to the custom death list.");
     }
 
     @Override
@@ -57,25 +63,42 @@ public class ListenerCustomDeath implements ICustomDeathListener {
 
     @EventHandler(priority=EventPriority.MONITOR, ignoreCancelled=true)
     public void onJoin(PlayerJoinEvent e) {
+        printDebug("Detected PlayerJoinEvent");
+        
         Player player = e.getPlayer();
+        printDebug("Player: " + player.getName());
+        
         YamlConfiguration playerData = this.plugin.getDataFile(player);
-        if(!playerData.getBoolean("kill-on-join")) return;
+        if(!playerData.getBoolean("kill-on-join")) {
+            printDebug("'kill-on-join' is false for player, ignoring event.");
+            return;
+        }
 
         add(player);
         player.setHealth(0.0D);
         playerData.set("kill-on-join", false);
         this.plugin.saveDataFile(player);
+        
+        printDebug("Successfully killed player and set 'kill-on-join' to false.");
     }
 
     @EventHandler(priority=EventPriority.MONITOR, ignoreCancelled=true)
     public void onDeath(PlayerDeathEvent e) {
+        printDebug("Detected PlayerDeathEvent");
+        
         Player player = e.getEntity();
+        printDebug("Player: " + player.getName());
+        
         boolean contains = contains(player);
+        printDebug("Player was in custom death list? " + contains);
         remove(player);
         
-        String customDeathMessage = getRandomCustomDeathMessage(player);
-        if(customDeathMessage != null) {
-            e.setDeathMessage(customDeathMessage);
+        if(contains) {
+            String customDeathMessage = getRandomCustomDeathMessage(player);
+            if(customDeathMessage != null) {
+                printDebug("Custom Death Message: '" + customDeathMessage + "'.");
+                e.setDeathMessage(customDeathMessage);
+            }
         }
     }
     
@@ -94,5 +117,9 @@ public class ListenerCustomDeath implements ICustomDeathListener {
         String playerName = player.getName();
         String messageReplaced = message.replace("{name}", playerName);
         return MessageUtility.color(messageReplaced);
+    }
+    
+    private void printDebug(String message) {
+        this.plugin.printDebug(message);
     }
 }
