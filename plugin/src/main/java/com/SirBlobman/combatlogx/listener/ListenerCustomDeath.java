@@ -7,7 +7,6 @@ import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.ThreadLocalRandom;
 
-import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -15,12 +14,18 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 
+import com.github.sirblobman.api.utility.MessageUtility;
+import com.github.sirblobman.api.utility.Validate;
 import com.SirBlobman.combatlogx.api.ICombatLogX;
 import com.SirBlobman.combatlogx.api.listener.ICustomDeathListener;
+
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 public class ListenerCustomDeath implements ICustomDeathListener {
     private final ICombatLogX plugin;
     private final Set<UUID> customDeathSet;
+    
     public ListenerCustomDeath(ICombatLogX plugin) {
         this.plugin = Objects.requireNonNull(plugin, "plugin must not be null!");
         this.customDeathSet = new HashSet<>();
@@ -67,15 +72,27 @@ public class ListenerCustomDeath implements ICustomDeathListener {
         Player player = e.getEntity();
         boolean contains = contains(player);
         remove(player);
-
-        if(contains) {
-            FileConfiguration config = this.plugin.getConfig("config.yml");
-            List<String> customDeathMessageList = config.getStringList("punishments.custom-death-messages");
-            if(customDeathMessageList.isEmpty()) return;
-
-            int random = ThreadLocalRandom.current().nextInt(customDeathMessageList.size());
-            String message = customDeathMessageList.get(random).replace("{name}", player.getName());
-            e.setDeathMessage(message);
+        
+        String customDeathMessage = getRandomCustomDeathMessage(player);
+        if(customDeathMessage != null) {
+            e.setDeathMessage(customDeathMessage);
         }
+    }
+    
+    @Nullable
+    private String getRandomCustomDeathMessage(@NotNull Player player) {
+        Validate.notNull(player, "player must not be null!");
+        
+        YamlConfiguration configuration = this.plugin.getConfig("config.yml");
+        List<String> customDeathMessageList = configuration.getStringList("punishments.custom-death-messages");
+        if(customDeathMessageList.isEmpty()) return null;
+        
+        int customDeathMessageListSize = customDeathMessageList.size();
+        int randomIndex = ThreadLocalRandom.current().nextInt(customDeathMessageListSize);
+        String message = customDeathMessageList.get(randomIndex);
+        
+        String playerName = player.getName();
+        String messageReplaced = message.replace("{name}", playerName);
+        return MessageUtility.color(messageReplaced);
     }
 }

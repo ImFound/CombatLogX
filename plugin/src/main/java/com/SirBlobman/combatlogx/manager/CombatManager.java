@@ -266,14 +266,14 @@ public class CombatManager implements ICombatManager, Runnable {
     }
     
     private void checkKill(Player player) {
-        YamlConfiguration config = this.plugin.getConfig("config.yml");
-        String killOption = config.getString("punishments.kill-time");
+        YamlConfiguration configuration = this.plugin.getConfig("config.yml");
+        String killOption = configuration.getString("punishments.kill-time");
         if(killOption == null) killOption = "QUIT";
         
         if(killOption.equals("QUIT")) {
-            player.setHealth(0.0D);
             ICustomDeathListener customDeathListener = this.plugin.getCustomDeathListener();
             customDeathListener.add(player);
+            player.setHealth(0.0D);
             return;
         }
         

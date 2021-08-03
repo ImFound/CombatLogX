@@ -8,6 +8,7 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import com.github.sirblobman.api.configuration.ConfigurationManager;
 import com.github.sirblobman.api.nms.MultiVersionHandler;
 
 import com.SirBlobman.combatlogx.api.expansion.ExpansionManager;
@@ -35,6 +36,8 @@ public interface ICombatLogX {
 
     ClassLoader getPluginClassLoader();
     ICustomDeathListener getCustomDeathListener();
+    
+    ConfigurationManager getConfigurationManager();
     MultiVersionHandler getMultiVersionHandler();
     
     ICombatManager getCombatManager();
