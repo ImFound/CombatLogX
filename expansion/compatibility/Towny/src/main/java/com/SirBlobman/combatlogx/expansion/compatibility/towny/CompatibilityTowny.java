@@ -13,6 +13,7 @@ import com.SirBlobman.combatlogx.api.expansion.noentry.NoEntryForceFieldListener
 import com.SirBlobman.combatlogx.api.expansion.noentry.NoEntryHandler;
 import com.SirBlobman.combatlogx.api.expansion.noentry.NoEntryListener;
 import com.SirBlobman.combatlogx.expansion.compatibility.towny.handler.TownyNoEntryHandler;
+import com.SirBlobman.combatlogx.expansion.compatibility.towny.listener.ListenerTownyMemberTagging;
 
 public class CompatibilityTowny extends NoEntryExpansion {
     private NoEntryForceFieldListener forceFieldListener;
@@ -51,6 +52,7 @@ public class CompatibilityTowny extends NoEntryExpansion {
 
         NoEntryListener listener = new NoEntryListener(this);
         expansionManager.registerListener(this, listener);
+        expansionManager.registerListener(this, new ListenerTownyMemberTagging(this));
 
         Plugin pluginProtocolLib = manager.getPlugin("ProtocolLib");
         if(pluginProtocolLib != null) {

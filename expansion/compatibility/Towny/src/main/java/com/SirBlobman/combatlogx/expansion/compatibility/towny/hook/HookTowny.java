@@ -14,15 +14,15 @@ import io.github.townyadvanced.flagwar.FlagWarAPI;
 
 public final class HookTowny {
     public static boolean isSafeZone(Location location) {
-        TownBlock townBlock = getTownBlock(location);
-        if(townBlock == null) return false;
-        
         TownyAPI townyAPI = TownyAPI.getInstance();
         if(townyAPI.isWarTime()) return false;
-        
+    
+        TownBlock townBlock = townyAPI.getTownBlock(location);
+        if(townBlock == null) return false;
+    
         TownyWorld townyWorld = townBlock.getWorld();
         if(townyWorld == null || townyWorld.isForcePVP()) return false;
-        
+    
         Town town;
         try {
             town = townBlock.getTown();
@@ -30,18 +30,13 @@ public final class HookTowny {
         } catch(NotRegisteredException ex) {
             return false;
         }
-        
+    
         PluginManager pluginManager = Bukkit.getPluginManager();
         if(pluginManager.isPluginEnabled("FlagWar")) {
             if(FlagWarAPI.isUnderAttack(town)) return false;
         }
-        
+    
         TownyPermission townBlockPermissions = townBlock.getPermissions();
         return !townBlockPermissions.pvp;
-    }
-    
-    private static TownBlock getTownBlock(Location location) {
-        TownyAPI townyAPI = TownyAPI.getInstance();
-        return townyAPI.getTownBlock(location);
     }
 }
