@@ -1,116 +1,132 @@
 package com.SirBlobman.combatlogx.expansion.cheat.prevention.listener;
 
-import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.TimeUnit;
 
-import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 
+import com.github.sirblobman.api.configuration.ConfigurationManager;
 import com.SirBlobman.combatlogx.api.event.PlayerUntagEvent;
 import com.SirBlobman.combatlogx.api.event.PlayerUntagEvent.UntagReason;
 import com.SirBlobman.combatlogx.expansion.cheat.prevention.CheatPrevention;
 
 public class ListenerCommandBlocker extends CheatPreventionListener {
     private final Map<UUID, Long> cooldownMap;
+    
     public ListenerCommandBlocker(CheatPrevention expansion) {
         super(expansion);
-        this.cooldownMap = new HashMap<>();
+        this.cooldownMap = new ConcurrentHashMap<>();
     }
-
-    private boolean isInCooldown(Player player) {
-        if(player == null) return false;
-
-        UUID uuid = player.getUniqueId();
-        long expireTime = cooldownMap.getOrDefault(uuid, 0L);
-        long systemTime = System.currentTimeMillis();
-        if(systemTime >= expireTime) {
-            removeCooldown(player);
-            return false;
-        }
-
-        return true;
+    
+    @EventHandler(priority=EventPriority.LOWEST, ignoreCancelled=true)
+    public void beforeCommandLowest(PlayerCommandPreprocessEvent e) {
+        checkEvent(e);
     }
-
-    private void addCooldown(Player player) {
-        if(player == null) return;
-
-        FileConfiguration config = getConfig();
-        long cooldownSeconds = config.getLong("command-blocker.delay-after-combat");
-        if(cooldownSeconds <= 0) return;
-
-        long cooldownMillis = TimeUnit.SECONDS.toMillis(cooldownSeconds);
-        long systemTime = System.currentTimeMillis();
-        long expireTime = (systemTime + cooldownMillis);
-
-        UUID uuid = player.getUniqueId();
-        cooldownMap.put(uuid, expireTime);
+    
+    @EventHandler(priority=EventPriority.HIGH, ignoreCancelled=true)
+    public void beforeCommandHigh(PlayerCommandPreprocessEvent e) {
+        checkEvent(e);
     }
-
-    private void removeCooldown(Player player) {
-        if(player == null) return;
-
-        UUID uuid = player.getUniqueId();
-        cooldownMap.remove(uuid);
-    }
-
+    
     @EventHandler(priority=EventPriority.MONITOR, ignoreCancelled=true)
     public void onUntag(PlayerUntagEvent e) {
-        UntagReason reason = e.getUntagReason();
-        if(!reason.isExpire()) return;
-
+        UntagReason untagReason = e.getUntagReason();
+        if(!untagReason.isExpire()) return;
+        
         Player player = e.getPlayer();
         addCooldown(player);
     }
-
-    @EventHandler(priority=EventPriority.LOWEST, ignoreCancelled=true)
-    public void beforeCommandLowest(PlayerCommandPreprocessEvent e) {
-        Player player = e.getPlayer();
-        if(!isInCombat(player) && !isInCooldown(player)) return;
-
-        String command = e.getMessage();
-        String actualCommand = convertCommand(command);
-        if(!isBlocked(actualCommand) || isAllowed(actualCommand)) return;
-
-        e.setCancelled(true);
-        String message = getMessage("cheat-prevention.command-blocked").replace("{command}", actualCommand);
-        sendMessage(player, message);
-    }
-
-    @EventHandler(priority=EventPriority.HIGH, ignoreCancelled=true)
-    public void beforeCommandHigh(PlayerCommandPreprocessEvent e) {
-        beforeCommandLowest(e);
-    }
-
-    private String convertCommand(String command) {
-        if(command == null || command.isEmpty()) return "";
-        return (command.startsWith("/") ? command : ("/" + command));
+    
+    private YamlConfiguration getConfiguration() {
+        CheatPrevention expansion = getExpansion();
+        ConfigurationManager configurationManager = expansion.getConfigurationManager();
+        return configurationManager.get("cheat-prevention.yml");
     }
     
-    private boolean isBlocked(String command) {
-        FileConfiguration config = getConfig();
-        List<String> blockedCommandList = config.getStringList("command-blocker.blocked-commands");
-        return startsWithAny(command, blockedCommandList);
+    private long getNewExpireTime() {
+        YamlConfiguration configuration = getConfiguration();
+        long cooldownSeconds = configuration.getLong("command-blocker.delay-after-combat");
+        long cooldownMillis = TimeUnit.SECONDS.toMillis(cooldownSeconds);
+        
+        long systemMillis = System.currentTimeMillis();
+        return (systemMillis + cooldownMillis);
     }
     
-    private boolean isAllowed(String command) {
-        FileConfiguration config = getConfig();
-        List<String> blockedCommandList = config.getStringList("command-blocker.allowed-commands");
-        return startsWithAny(command, blockedCommandList);
+    private boolean hasCooldown(Player player) {
+        UUID playerId = player.getUniqueId();
+        if(!this.cooldownMap.containsKey(playerId)) {
+            return false;
+        }
+        
+        long expireMillis = this.cooldownMap.get(playerId);
+        long systemMillis = System.currentTimeMillis();
+        if(systemMillis >= expireMillis) {
+            this.cooldownMap.remove(playerId);
+            return false;
+        }
+        
+        return true;
     }
     
-    private boolean startsWithAny(String command, List<String> commandList) {
-        if(commandList.contains("*") || commandList.contains("/*")) return true;
-        for(String value : commandList) {
-            if(!command.startsWith(value)) continue;
-            return true;
+    private void addCooldown(Player player) {
+        UUID playerId = player.getUniqueId();
+        long expireMillis = getNewExpireTime();
+        this.cooldownMap.put(playerId, expireMillis);
+    }
+    
+    private String fixCommand(String command) {
+        if(!command.startsWith("/")) {
+            command = ("/" + command);
+        }
+        
+        return command;
+    }
+    
+    private boolean matchesAny(String string, Iterable<String> values) {
+        String stringLower = string.toLowerCase(Locale.US);
+        for(String value : values) {
+            if(value.equals("*")) return true;
+            if(value.equals("/*")) return true;
+            
+            String valueLower = value.toLowerCase(Locale.US);
+            if(stringLower.equals(valueLower)) return true;
+            if(stringLower.equals(valueLower + " ")) return true;
         }
         
         return false;
+    }
+    
+    private boolean isBlocked(String command) {
+        YamlConfiguration configuration = getConfiguration();
+        List<String> blockedCommandList = configuration.getStringList("command-blocker.blocked-commands");
+        return matchesAny(command, blockedCommandList);
+    }
+    
+    private boolean isAllowed(String command) {
+        YamlConfiguration configuration = getConfiguration();
+        List<String> allowedCommandList = configuration.getStringList("command-blocker.allowed-commands");
+        return matchesAny(command, allowedCommandList);
+    }
+    
+    private void checkEvent(PlayerCommandPreprocessEvent e) {
+        Player player = e.getPlayer();
+        if(!isInCombat(player) && !hasCooldown(player)) return;
+        
+        String originalCommand = e.getMessage();
+        String fixedCommand = fixCommand(originalCommand);
+        if(isAllowed(fixedCommand) || !isBlocked(fixedCommand)) return;
+        
+        e.setCancelled(true);
+        String message = getMessage("cheat-prevention.command-blocked")
+                .replace("{command}", originalCommand);
+        sendMessage(player, message);
     }
 }

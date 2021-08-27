@@ -20,6 +20,7 @@ abstract class CheatPreventionListener implements Listener {
     private final CheatPrevention expansion;
     private final ICombatLogX plugin;
     private final Map<String, List<UUID>> cooldownMap;
+    
     CheatPreventionListener(CheatPrevention expansion) {
         this.expansion = Objects.requireNonNull(expansion, "expansion must not be null!");
         this.plugin = this.expansion.getPlugin();
