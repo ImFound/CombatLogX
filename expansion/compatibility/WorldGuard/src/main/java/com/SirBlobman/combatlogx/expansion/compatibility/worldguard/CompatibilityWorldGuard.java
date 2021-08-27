@@ -16,9 +16,10 @@ import com.SirBlobman.combatlogx.expansion.compatibility.worldguard.handler.Worl
 import com.SirBlobman.combatlogx.expansion.compatibility.worldguard.hook.HookWorldGuard;
 import com.SirBlobman.combatlogx.expansion.compatibility.worldguard.listener.ListenerWorldGuard;
 
-public class CompatibilityWorldGuard extends NoEntryExpansion {
+public final class CompatibilityWorldGuard extends NoEntryExpansion {
     private NoEntryForceFieldListener forceFieldListener;
     private NoEntryHandler noEntryHandler;
+    
     public CompatibilityWorldGuard(ICombatLogX plugin) {
         super(plugin);
     }

@@ -1,15 +1,20 @@
 package com.SirBlobman.combatlogx.expansion.compatibility.worldguard.hook;
 
-import com.SirBlobman.combatlogx.api.expansion.Expansion;
-import com.SirBlobman.combatlogx.api.expansion.noentry.NoEntryExpansion;
-import com.SirBlobman.combatlogx.expansion.compatibility.worldguard.listener.Listener_V6_2;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Set;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
+import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
+
+import com.SirBlobman.combatlogx.api.expansion.Expansion;
+import com.SirBlobman.combatlogx.api.expansion.noentry.NoEntryExpansion;
+import com.SirBlobman.combatlogx.expansion.compatibility.worldguard.listener.Listener_V6_2;
 
 import com.sk89q.worldguard.bukkit.WorldGuardPlugin;
 import com.sk89q.worldguard.protection.ApplicableRegionSet;
@@ -18,6 +23,7 @@ import com.sk89q.worldguard.protection.flags.DefaultFlag;
 import com.sk89q.worldguard.protection.flags.StateFlag;
 import com.sk89q.worldguard.protection.flags.registry.FlagRegistry;
 import com.sk89q.worldguard.protection.managers.RegionManager;
+import com.sk89q.worldguard.protection.regions.ProtectedRegion;
 
 public final class HookWorldGuard_V6_2 {
     public static WorldGuardPlugin getAPI() {
