@@ -23,13 +23,17 @@ import com.SirBlobman.combatlogx.expansion.compatibility.citizens.manager.Sentin
 import com.SirBlobman.combatlogx.expansion.compatibility.citizens.manager.enemystorage.EnemyStorageManager;
 
 public class CompatibilityCitizens extends Expansion {
-    private NPCManager npcManager = null;
-    private SentinelManager sentinelManager = null;
-    private EnemyStorageManager enemyStorageManager = null;
-    public ListenerNPCMove npcMoveListener = null;
+    private NPCManager npcManager;
+    private SentinelManager sentinelManager;
+    private EnemyStorageManager enemyStorageManager;
+    public ListenerNPCMove npcMoveListener;
 
     public CompatibilityCitizens(ICombatLogX plugin) {
         super(plugin);
+        this.npcManager = null;
+        this.sentinelManager = null;
+        this.enemyStorageManager = null;
+        this.npcMoveListener = null;
     }
     
     @Override

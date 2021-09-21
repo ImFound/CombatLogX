@@ -45,14 +45,17 @@
             <id>uskyblock-repo</id>
             <url>https://www.uskyblock.ovh/maven/uskyblock/</url>
         </repository>
+        
+        <!-- BG-Software Repository -->
+        <repository>
+            <id>bg-repo</id>
+            <url>https://repo.bg-software.com/repository/api/</url>
+        </repository>
 
         <!-- JitPack Repository -->
         <repository>
             <id>jitpack</id>
             <url>https://jitpack.io/</url>
-            <snapshots>
-                <enabled>false</enabled>
-            </snapshots>
         </repository>
     </repositories>
 
@@ -119,9 +122,9 @@
 
         <!-- SuperiorSkyblock2 API -->
         <dependency>
-            <groupId>com.github.OmerBenGera</groupId>
+            <groupId>com.bgsoftware</groupId>
             <artifactId>SuperiorSkyblockAPI</artifactId>
-            <version>b12</version>
+            <version>latest</version>
             <scope>provided</scope>
         </dependency>
         
