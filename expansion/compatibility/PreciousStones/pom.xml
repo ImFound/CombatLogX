@@ -28,7 +28,7 @@
             <url>https://repo.codemc.io/repository/maven-public/</url>
         </repository>
         
-        <!-- ElMakers Repository -->
+        <!-- Elmakers Repository -->
         <repository>
             <id>elmakers-repo</id>
             <url>https://maven.elmakers.com/repository/</url>
@@ -56,8 +56,14 @@
         <dependency>
             <groupId>net.sacredlabyrinth.Phaed</groupId>
             <artifactId>PreciousStones</artifactId>
-            <version>1.16.1.3</version>
+            <version>15.0</version>
             <scope>provided</scope>
+            <exclusions>
+                <exclusion>
+                    <groupId>*</groupId>
+                    <artifactId>*</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
     </dependencies>
 </project>

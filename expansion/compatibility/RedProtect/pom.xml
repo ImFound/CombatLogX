@@ -45,7 +45,7 @@
             <version>${project.version}</version>
             <scope>provided</scope>
         </dependency>
-
+        
         <!-- RedProtect Core -->
         <dependency>
             <groupId>br.net.fabiozumbi12.RedProtect</groupId>
@@ -66,6 +66,12 @@
             <artifactId>RedProtect-Spigot</artifactId>
             <version>7.7.3</version>
             <scope>provided</scope>
+            <exclusions>
+                <exclusion>
+                    <groupId>*</groupId>
+                    <artifactId>*</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
     </dependencies>
 </project>
