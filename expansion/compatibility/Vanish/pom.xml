@@ -28,10 +28,10 @@
             <url>https://repo.codemc.io/repository/maven-public/</url>
         </repository>
         
-        <!-- EnderZone Repository -->
+        <!-- EssentialsX Releases -->
         <repository>
-            <id>ender-zone</id>
-            <url>https://ci.ender.zone/plugin/repository/everything/</url>
+            <id>essentials-releases</id>
+            <url>https://repo.essentialsx.net/releases/</url>
         </repository>
         
         <!-- CubeKrowd Repository -->
@@ -63,14 +63,14 @@
         
         <!-- EssentialsX -->
         <dependency>
-            <groupId>net.ess3</groupId>
+            <groupId>net.essentialsx</groupId>
             <artifactId>EssentialsX</artifactId>
-            <version>2.17.1</version>
+            <version>2.19.0</version>
             <scope>provided</scope>
             <exclusions>
                 <exclusion>
-                    <groupId>org.bukkit</groupId>
-                    <artifactId>bukkit</artifactId>
+                    <groupId>*</groupId>
+                    <artifactId>*</artifactId>
                 </exclusion>
             </exclusions>
         </dependency>
@@ -82,6 +82,12 @@
             <artifactId>SuperVanish</artifactId>
             <version>6.1.0</version>
             <scope>provided</scope>
+            <exclusions>
+                <exclusion>
+                    <groupId>*</groupId>
+                    <artifactId>*</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
     </dependencies>
 </project>
